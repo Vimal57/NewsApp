@@ -9,11 +9,7 @@ const App = () => {
 	const pageSize = 6;
 	const apiKey = process.env.REACT_APP_NEWS_API;
 
-	const [progress, setProgressValue] = useState(10);
-
-	const setProgress = (progress) => {
-		setProgressValue(progress);
-	}
+	const [progress, setProgress] = useState(10);
 
 	return (
 		<>

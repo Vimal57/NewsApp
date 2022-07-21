@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const News = (props) => {
 
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   // document.title = `${capitalizeFirstLetter(props.category)} - NewsHub`;
@@ -33,7 +33,8 @@ const News = (props) => {
 
   useEffect(() => {
     updateNews();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const handlePrevClick = async () => {
   //   setPage(page-1);
@@ -46,8 +47,8 @@ const News = (props) => {
   // }
 
   const fetchMoreData = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`;
     setPage(page+1);
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=8e49a9e0a89642b8b5a26f02a918d315&page=${page}&pageSize=${props.pageSize}`;
     // setLoading(true);
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -58,7 +59,7 @@ const News = (props) => {
 
     return (
       <>
-        <h1 className='text-center' style={{margin: '35px 0'}}>Fresh News - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
+        <h1 className='text-center' style={{margin: '35px 0', marginTop: '90px'}}>Fresh News - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
         {loading && <Spinner/>}
         <InfiniteScroll
           dataLength={articles.length}
@@ -67,10 +68,11 @@ const News = (props) => {
           loader={<Spinner/>}
           >
           <div className='container my-3'>
+
             <div className="row">
               {articles.map((element) => {
                 return <div className="col-md-4" key={element.url}>
-                  <NewsItem title={element.title} description={element.description} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} publishDate={element.publishedAt} source={element.source.name}/>
+                  <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} publishDate={element.publishedAt} source={element.source.name}/>
                 </div>
               })}
             </div>
